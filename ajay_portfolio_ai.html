@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ajay Gopavarapu — AI & Data Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f0e8;
+  --bg2: #ede8dc;
+  --ink: #1a1410;
+  --ink2: #3d3530;
+  --muted: #8a7f76;
+  --accent: #c84b2f;
+  --accent2: #2a6496;
+  --accent3: #4a7c59;
+  --border: #d4cdc3;
+  --surface: #ffffff;
+  --shadow: rgba(26,20,16,0.08);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-weight: 400;
+  overflow-x: hidden;
+}
+
+/* ── CURSOR ── */
+.cur { position:fixed; width:8px; height:8px; background:var(--accent); border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:transform 0.08s; mix-blend-mode:multiply; }
+.cur-o { position:fixed; width:32px; height:32px; border:1.5px solid var(--accent); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:width 0.2s,height 0.2s,opacity 0.2s; opacity:0.4; }
+body { cursor: none; }
+
+/* ── GRAIN ── */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='0.06'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:999; opacity:0.5;
+}
+
+/* ── NAV ── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:1.1rem 3rem;
+  background:rgba(245,240,232,0.88);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+
+.nav-logo {
+  font-family:'Fira Code', monospace;
+  font-size:0.85rem;
+  color:var(--accent);
+  text-decoration:none;
+  letter-spacing:0.02em;
+}
+
+.nav-links { display:flex; gap:2rem; list-style:none; }
+.nav-links a {
+  font-family:'Fira Code', monospace;
+  font-size:0.72rem;
+  color:var(--muted);
+  text-decoration:none;
+  letter-spacing:0.06em;
+  text-transform:lowercase;
+  transition:color 0.2s;
+}
+.nav-links a:hover { color:var(--accent); }
+
+.nav-status {
+  display:flex; align-items:center; gap:0.5rem;
+  font-family:'Fira Code', monospace;
+  font-size:0.68rem;
+  color:var(--accent3);
+}
+.status-dot {
+  width:7px; height:7px;
+  background:var(--accent3);
+  border-radius:50%;
+  animation:pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+/* ── HERO ── */
+.hero {
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  align-items:center;
+  padding:8rem 3rem 4rem;
+  max-width:1280px;
+  margin:0 auto;
+  gap:4rem;
+}
+
+.hero-left { position:relative; }
+
+.hero-eyebrow {
+  font-family:'Fira Code', monospace;
+  font-size:0.72rem;
+  color:var(--accent);
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  margin-bottom:1.2rem;
+  opacity:0;
+  animation:fadeUp 0.7s ease 0.2s forwards;
+}
+
+.hero-name {
+  font-family:'Clash Display', sans-serif;
+  font-weight:700;
+  font-size:clamp(3.2rem,6vw,5rem);
+  line-height:0.95;
+  letter-spacing:-0.04em;
+  margin-bottom:0.6rem;
+  opacity:0;
+  animation:fadeUp 0.7s ease 0.35s forwards;
+}
+
+.hero-name .line2 {
+  color:var(--accent);
+  display:block;
+}
+
+.hero-role {
+  font-family:'Fira Code', monospace;
+  font-size:0.82rem;
+  color:var(--muted);
+  margin-bottom:1.8rem;
+  opacity:0;
+  animation:fadeUp 0.7s ease 0.5s forwards;
+}
+
+.hero-desc {
+  font-size:1.05rem;
+  color:var(--ink2);
+  line-height:1.8;
+  max-width:480px;
+  margin-bottom:2.5rem;
+  opacity:0;
+  animation:fadeUp 0.7s ease 0.65s forwards;
+}
+
+.hero-desc strong { color:var(--accent); font-weight:500; }
+
+.hero-ctas {
+  display:flex; gap:1rem; flex-wrap:wrap;
+  opacity:0;
+  animation:fadeUp 0.7s ease 0.8s forwards;
+}
+
+.btn-fill {
+  font-family:'Fira Code', monospace;
+  font-size:0.72rem;
+  letter-spacing:0.06em;
+  padding:0.8rem 1.6rem;
+  background:var(--ink);
+  color:var(--bg);
+  text-decoration:none;
+  border:1.5px solid var(--ink);
+  transition:all 0.2s;
+  display:inline-block;
+}
+.btn-fill:hover { background:var(--accent); border-color:var(--accent); }
+
+.btn-ghost {
+  font-family:'Fira Code', monospace;
+  font-size:0.72rem;
+  letter-spacing:0.06em;
+  padding:0.8rem 1.6rem;
+  background:transparent;
+  color:var(--ink);
+  text-decoration:none;
+  border:1.5px solid var(--border);
+  transition:all 0.2s;
+  display:inline-block;
+}
+.btn-ghost:hover { border-color:var(--ink); }
+
+/* ── HERO RIGHT — terminal card ── */
+.hero-right {
+  opacity:0;
+  animation:fadeUp 0.7s ease 0.9s forwards;
+}
+
+.terminal {
+  background:var(--ink);
+  border-radius:8px;
+  overflow:hidden;
+  box-shadow:0 24px 64px rgba(26,20,16,0.2);
+}
+
+.terminal-bar {
+  background:#2a2520;
+  padding:0.7rem 1rem;
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+}
+.t-dot { width:12px; height:12px; border-radius:50%; }
+.t-dot.r { background:#ff5f57; }
+.t-dot.y { background:#febc2e; }
+.t-dot.g { background:#28c840; }
+.t-title { font-family:'Fira Code', monospace; font-size:0.68rem; color:#666; margin-left:auto; margin-right:auto; }
+
+.terminal-body {
+  padding:1.5rem;
+  font-family:'Fira Code', monospace;
+  font-size:0.78rem;
+  line-height:2;
+}
+
+.t-line { display:block; }
+.t-prompt { color:#4a7c59; }
+.t-cmd { color:#e8e0d0; }
+.t-comment { color:#665e58; }
+.t-key { color:#c084fc; }
+.t-val { color:#86efac; }
+.t-str { color:#fbbf24; }
+.t-num { color:#60a5fa; }
+.t-accent { color:#f87171; }
+
+/* ── SECTION SHARED ── */
+.section-wrap { max-width:1280px; margin:0 auto; padding:6rem 3rem; }
+
+.section-label {
+  font-family:'Fira Code', monospace;
+  font-size:0.68rem;
+  color:var(--accent);
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  display:flex; align-items:center; gap:0.8rem;
+  margin-bottom:0.8rem;
+}
+.section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+.section-title {
+  font-family:'Clash Display', sans-serif;
+  font-weight:700;
+  font-size:clamp(2rem,4vw,3rem);
+  letter-spacing:-0.03em;
+  line-height:1.05;
+  margin-bottom:3rem;
+}
+
+/* ── EXPERTISE AREA ── */
+.expertise-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.5px;
+  background:var(--border);
+  border:1.5px solid var(--border);
+  margin-bottom:5rem;
+}
+
+.exp-cell {
+  background:var(--bg);
+  padding:2rem;
+  transition:background 0.25s;
+  position:relative;
+  overflow:hidden;
+}
+.exp-cell:hover { background:var(--surface); }
+
+.exp-cell::before {
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0;
+  height:3px;
+  background:var(--accent);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform 0.3s ease;
+}
+.exp-cell:hover::before { transform:scaleX(1); }
+
+.exp-num {
+  font-family:'Fira Code', monospace;
+  font-size:0.62rem;
+  color:var(--border);
+  letter-spacing:0.1em;
+  margin-bottom:1rem;
+}
+
+.exp-title {
+  font-family:'Clash Display', sans-serif;
+  font-size:1.1rem;
+  font-weight:600;
+  letter-spacing:-0.02em;
+  margin-bottom:0.6rem;
+  color:var(--ink);
+}
+
+.exp-desc {
+  font-size:0.85rem;
+  color:var(--muted);
+  line-height:1.65;
+  margin-bottom:1rem;
+}
+
+.exp-tags { display:flex; flex-wrap:wrap; gap:0.35rem; }
+.exp-tag {
+  font-family:'Fira Code', monospace;
+  font-size:0.62rem;
+  color:var(--accent2);
+  background:rgba(42,100,150,0.08);
+  border:1px solid rgba(42,100,150,0.2);
+  padding:0.18rem 0.5rem;
+  border-radius:2px;
+}
+
+/* ── PROJECTS ── */
+.projects-list { display:flex; flex-direction:column; gap:1.5px; background:var(--border); border:1.5px solid var(--border); }
+
+.project-row {
+  background:var(--bg);
+  display:grid;
+  grid-template-columns:60px 1fr auto;
+  align-items:start;
+  gap:2rem;
+  padding:2rem 2rem;
+  transition:background 0.2s;
+  opacity:0;
+  transform:translateY(16px);
+  transition:opacity 0.5s ease, transform 0.5s ease, background 0.2s;
+  cursor:pointer;
+}
+.project-row.visible { opacity:1; transform:translateY(0); }
+.project-row:hover { background:var(--surface); }
+
+.proj-num {
+  font-family:'Fira Code', monospace;
+  font-size:0.65rem;
+  color:var(--border);
+  padding-top:0.2rem;
+}
+
+.proj-content {}
+.proj-title {
+  font-family:'Clash Display', sans-serif;
+  font-size:1.25rem;
+  font-weight:600;
+  letter-spacing:-0.025em;
+  margin-bottom:0.4rem;
+}
+
+.proj-desc {
+  font-size:0.875rem;
+  color:var(--muted);
+  line-height:1.65;
+  max-width:640px;
+  margin-bottom:1rem;
+}
+
+.proj-highlights { list-style:none; margin-bottom:1rem; }
+.proj-highlights li {
+  font-size:0.82rem;
+  color:var(--ink2);
+  line-height:1.6;
+  padding:0.15rem 0;
+  padding-left:1rem;
+  position:relative;
+}
+.proj-highlights li::before { content:'→'; position:absolute; left:0; color:var(--accent); font-size:0.72rem; top:0.22rem; }
+
+.proj-stack { display:flex; flex-wrap:wrap; gap:0.35rem; }
+.proj-chip {
+  font-family:'Fira Code', monospace;
+  font-size:0.62rem;
+  color:var(--accent);
+  background:rgba(200,75,47,0.07);
+  border:1px solid rgba(200,75,47,0.18);
+  padding:0.2rem 0.55rem;
+  border-radius:2px;
+}
+
+.proj-link-col { padding-top:0.2rem; }
+.proj-link {
+  font-family:'Fira Code', monospace;
+  font-size:0.68rem;
+  color:var(--muted);
+  text-decoration:none;
+  display:flex; align-items:center; gap:0.3rem;
+  white-space:nowrap;
+  transition:color 0.2s;
+}
+.proj-link:hover { color:var(--accent); }
+
+/* ── ROADMAP ── */
+.roadmap-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:1.5rem;
+}
+
+.roadmap-card {
+  border:1.5px solid var(--border);
+  padding:1.8rem;
+  background:var(--bg);
+  position:relative;
+  transition:all 0.25s;
+  opacity:0;
+  transform:translateY(16px);
+  transition:opacity 0.5s ease, transform 0.5s ease, border-color 0.25s;
+}
+.roadmap-card.visible { opacity:1; transform:translateY(0); }
+.roadmap-card:hover { border-color:var(--ink); background:var(--surface); }
+
+.roadmap-card.done { border-color:var(--accent3); }
+.roadmap-card.in-progress { border-color:var(--accent); }
+.roadmap-card.planned { border-color:var(--border); }
+
+.card-badge {
+  font-family:'Fira Code', monospace;
+  font-size:0.6rem;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  padding:0.2rem 0.55rem;
+  border-radius:2px;
+  display:inline-block;
+  margin-bottom:1rem;
+}
+.badge-done { background:rgba(74,124,89,0.12); color:var(--accent3); border:1px solid rgba(74,124,89,0.25); }
+.badge-progress { background:rgba(200,75,47,0.1); color:var(--accent); border:1px solid rgba(200,75,47,0.22); }
+.badge-planned { background:rgba(138,127,118,0.1); color:var(--muted); border:1px solid var(--border); }
+
+.card-title {
+  font-family:'Clash Display', sans-serif;
+  font-size:1rem;
+  font-weight:600;
+  letter-spacing:-0.02em;
+  margin-bottom:0.5rem;
+}
+.card-desc { font-size:0.82rem; color:var(--muted); line-height:1.6; margin-bottom:0.8rem; }
+.card-stack { font-family:'Fira Code', monospace; font-size:0.62rem; color:var(--muted); }
+
+/* ── EXPERIENCE TIMELINE ── */
+.tl { position:relative; padding-left:2rem; }
+.tl::before { content:''; position:absolute; left:0; top:0.5rem; bottom:0; width:1px; background:linear-gradient(to bottom, var(--accent), var(--border), transparent); }
+
+.tl-item {
+  position:relative;
+  margin-bottom:3.5rem;
+  padding-left:1.5rem;
+  opacity:0;
+  transform:translateX(-16px);
+  transition:opacity 0.6s ease, transform 0.6s ease;
+}
+.tl-item.visible { opacity:1; transform:translateX(0); }
+
+.tl-dot { position:absolute; left:-2.05rem; top:0.35rem; width:9px; height:9px; background:var(--accent); border-radius:50%; box-shadow:0 0 0 3px var(--bg), 0 0 0 4px var(--accent); }
+
+.tl-head { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-bottom:0.5rem; }
+.tl-title { font-family:'Clash Display', sans-serif; font-size:1.1rem; font-weight:600; letter-spacing:-0.02em; }
+.tl-company { font-family:'Fira Code', monospace; font-size:0.72rem; color:var(--accent2); margin-top:0.2rem; }
+.tl-date { font-family:'Fira Code', monospace; font-size:0.65rem; color:var(--muted); border:1px solid var(--border); padding:0.2rem 0.6rem; white-space:nowrap; margin-top:0.2rem; }
+
+.tl-bullets { list-style:none; margin-top:0.6rem; }
+.tl-bullets li { font-size:0.87rem; color:var(--ink2); line-height:1.65; padding:0.18rem 0 0.18rem 1rem; position:relative; }
+.tl-bullets li::before { content:'▸'; position:absolute; left:0; color:var(--accent); font-size:0.7rem; top:0.3rem; }
+
+/* ── CONTACT ── */
+.contact-band {
+  background:var(--ink);
+  color:var(--bg);
+}
+.contact-inner {
+  max-width:1280px; margin:0 auto;
+  padding:6rem 3rem;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4rem;
+  align-items:center;
+}
+
+.contact-title {
+  font-family:'Clash Display', sans-serif;
+  font-weight:700;
+  font-size:clamp(2rem,4vw,3.2rem);
+  letter-spacing:-0.03em;
+  line-height:1.05;
+  margin-bottom:1rem;
+  color:var(--bg);
+}
+.contact-title span { color:var(--accent); }
+.contact-sub { font-size:0.9rem; color:#a09890; line-height:1.7; margin-bottom:2rem; }
+
+.contact-cards { display:flex; flex-direction:column; gap:1px; background:#2a2520; border:1px solid #2a2520; }
+.c-card {
+  background:#1a1410;
+  display:flex; align-items:center; gap:1.2rem;
+  padding:1rem 1.3rem;
+  text-decoration:none;
+  transition:background 0.2s;
+}
+.c-card:hover { background:#2a2520; }
+.c-icon { font-family:'Fira Code', monospace; font-size:0.75rem; color:var(--accent); width:28px; }
+.c-label { font-family:'Fira Code', monospace; font-size:0.62rem; color:#665e58; text-transform:uppercase; letter-spacing:0.1em; display:block; margin-bottom:0.1rem; }
+.c-val { font-size:0.88rem; color:#e8e0d0; }
+
+/* ── FOOTER ── */
+footer { background:var(--ink); border-top:1px solid #2a2520; }
+.footer-inner { max-width:1280px; margin:0 auto; padding:1.5rem 3rem; display:flex; justify-content:space-between; align-items:center; }
+.f-text { font-family:'Fira Code', monospace; font-size:0.65rem; color:#665e58; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width:3px; }
+::-webkit-scrollbar-track { background:var(--bg2); }
+::-webkit-scrollbar-thumb { background:var(--accent); }
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .hero { grid-template-columns:1fr; padding:6rem 1.5rem 3rem; }
+  .hero-right { display:none; }
+  .expertise-grid { grid-template-columns:1fr; }
+  .contact-inner { grid-template-columns:1fr; }
+  nav { padding:1rem 1.5rem; }
+  .nav-links { display:none; }
+  .section-wrap { padding:4rem 1.5rem; }
+  .project-row { grid-template-columns:1fr; }
+  .proj-num { display:none; }
+}
+</style>
+</head>
+<body>
+
+<div class="cur" id="cur"></div>
+<div class="cur-o" id="curO"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">ajay.g_()</a>
+  <ul class="nav-links">
+    <li><a href="#expertise">expertise</a></li>
+    <li><a href="#projects">projects</a></li>
+    <li><a href="#roadmap">roadmap</a></li>
+    <li><a href="#experience">experience</a></li>
+    <li><a href="#contact">contact</a></li>
+  </ul>
+  <div class="nav-status"><div class="status-dot"></div>open to work</div>
+</nav>
+
+<!-- HERO -->
+<section>
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">// data engineer · ai developer · chicago, il</div>
+    <h1 class="hero-name">Ajay<span class="line2">Gopavarapu</span></h1>
+    <p class="hero-role">MS Computer Science (AI) · Python · Spark · AWS · GCP · LLMs</p>
+    <p class="hero-desc">
+      Building the <strong>data infrastructure</strong> that powers AI systems — scalable pipelines, ML-ready datasets, and LLM-driven applications. 3+ years across financial and healthcare domains.
+    </p>
+    <div class="hero-ctas">
+      <a href="https://github.com/AJAY00923" target="_blank" class="btn-fill">GitHub →</a>
+      <a href="https://linkedin.com/in/ajay-gopavarapu-bb2a261bb" target="_blank" class="btn-ghost">LinkedIn</a>
+      <a href="mailto:ajaygopavrapu143@gmail.com" class="btn-ghost">Email</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="t-dot r"></div>
+        <div class="t-dot y"></div>
+        <div class="t-dot g"></div>
+        <span class="t-title">ajay_profile.py</span>
+      </div>
+      <div class="terminal-body">
+        <span class="t-line"><span class="t-comment"># AI & Data Engineer</span></span>
+        <span class="t-line"></span>
+        <span class="t-line"><span class="t-key">profile</span> <span class="t-cmd">= {</span></span>
+        <span class="t-line">  <span class="t-key">  name</span><span class="t-cmd">:</span> <span class="t-str">"Ajay Gopavarapu"</span><span class="t-cmd">,</span></span>
+        <span class="t-line">  <span class="t-key">  role</span><span class="t-cmd">:</span> <span class="t-str">"Data Engineer + AI Dev"</span><span class="t-cmd">,</span></span>
+        <span class="t-line">  <span class="t-key">  exp</span><span class="t-cmd">:</span> <span class="t-num">3</span><span class="t-cmd">,  </span><span class="t-comment"># years</span></span>
+        <span class="t-line">  <span class="t-key">  ms_ai</span><span class="t-cmd">:</span> <span class="t-val">True</span><span class="t-cmd">,</span></span>
+        <span class="t-line">  <span class="t-key">  stack</span><span class="t-cmd">: [</span></span>
+        <span class="t-line">    <span class="t-str">    "Python"</span><span class="t-cmd">,</span> <span class="t-str">"PySpark"</span><span class="t-cmd">,</span></span>
+        <span class="t-line">    <span class="t-str">    "Airflow"</span><span class="t-cmd">,</span> <span class="t-str">"dbt"</span><span class="t-cmd">,</span></span>
+        <span class="t-line">    <span class="t-str">    "AWS"</span><span class="t-cmd">,</span> <span class="t-str">"GCP"</span><span class="t-cmd">,</span></span>
+        <span class="t-line">    <span class="t-str">    "Snowflake"</span><span class="t-cmd">,</span> <span class="t-str">"Kafka"</span><span class="t-cmd">,</span></span>
+        <span class="t-line">    <span class="t-str">    "LangChain"</span><span class="t-cmd">,</span> <span class="t-str">"LLMs"</span></span>
+        <span class="t-line">  <span class="t-cmd">  ],</span></span>
+        <span class="t-line">  <span class="t-key">  open_to_work</span><span class="t-cmd">:</span> <span class="t-val">True</span></span>
+        <span class="t-line"><span class="t-cmd">}</span></span>
+        <span class="t-line"></span>
+        <span class="t-line"><span class="t-accent">▋</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- EXPERTISE -->
+<section id="expertise" style="background:var(--bg2); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+<div class="section-wrap">
+  <div class="section-label">areas of focus</div>
+  <h2 class="section-title">What I build</h2>
+  <div class="expertise-grid">
+    <div class="exp-cell">
+      <div class="exp-num">01</div>
+      <div class="exp-title">Data Pipeline Engineering</div>
+      <p class="exp-desc">Production-grade ETL/ELT pipelines, CDC-based incremental loading, and distributed batch & streaming systems that process millions of records reliably.</p>
+      <div class="exp-tags">
+        <span class="exp-tag">PySpark</span><span class="exp-tag">Airflow</span><span class="exp-tag">Kafka</span><span class="exp-tag">dbt</span><span class="exp-tag">AWS Glue</span>
+      </div>
+    </div>
+    <div class="exp-cell">
+      <div class="exp-num">02</div>
+      <div class="exp-title">LLM & AI Application Dev</div>
+      <p class="exp-desc">Building RAG pipelines, LLM-powered APIs, and AI-driven data applications that turn unstructured data into intelligent, queryable systems.</p>
+      <div class="exp-tags">
+        <span class="exp-tag">LangChain</span><span class="exp-tag">OpenAI API</span><span class="exp-tag">RAG</span><span class="exp-tag">FastAPI</span><span class="exp-tag">Vector DBs</span>
+      </div>
+    </div>
+    <div class="exp-cell">
+      <div class="exp-num">03</div>
+      <div class="exp-title">ML Data Infrastructure</div>
+      <p class="exp-desc">Feature engineering pipelines, experiment tracking, and data infrastructure that feeds ML models — bridging the gap between raw data and production AI systems.</p>
+      <div class="exp-tags">
+        <span class="exp-tag">MLflow</span><span class="exp-tag">Feature Store</span><span class="exp-tag">BigQuery</span><span class="exp-tag">Snowflake</span><span class="exp-tag">HuggingFace</span>
+      </div>
+    </div>
+    <div class="exp-cell">
+      <div class="exp-num">04</div>
+      <div class="exp-title">Cloud & Storage Architecture</div>
+      <p class="exp-desc">Multi-cloud data lake design across AWS and GCP with partitioning strategies, query optimization, and cost-efficient storage patterns at scale.</p>
+      <div class="exp-tags">
+        <span class="exp-tag">AWS S3</span><span class="exp-tag">Redshift</span><span class="exp-tag">BigQuery</span><span class="exp-tag">GCP Dataflow</span><span class="exp-tag">Lambda</span>
+      </div>
+    </div>
+    <div class="exp-cell">
+      <div class="exp-num">05</div>
+      <div class="exp-title">Data Quality & Observability</div>
+      <p class="exp-desc">Multi-layer data quality enforcement with anomaly detection, statistical validation, schema testing, and automated monitoring for production pipelines.</p>
+      <div class="exp-tags">
+        <span class="exp-tag">Great Expectations</span><span class="exp-tag">dbt Tests</span><span class="exp-tag">Reconciliation</span><span class="exp-tag">Anomaly Detection</span>
+      </div>
+    </div>
+    <div class="exp-cell">
+      <div class="exp-num">06</div>
+      <div class="exp-title">Analytics & Statistical Modeling</div>
+      <p class="exp-desc">EDA, KPI dashboarding, and statistical modeling including Monte Carlo simulation, regression analysis, and probabilistic forecasting for data-driven decisions.</p>
+      <div class="exp-tags">
+        <span class="exp-tag">Power BI</span><span class="exp-tag">Tableau</span><span class="exp-tag">NumPy</span><span class="exp-tag">Monte Carlo</span><span class="exp-tag">SQL</span>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+<div class="section-wrap">
+  <div class="section-label">portfolio</div>
+  <h2 class="section-title">Projects</h2>
+  <div class="projects-list">
+
+    <div class="project-row">
+      <div class="proj-num">01</div>
+      <div class="proj-content">
+        <div class="proj-title">NYC Taxi ELT Pipeline</div>
+        <p class="proj-desc">Production-grade batch ELT pipeline ingesting NYC TLC yellow taxi trip data monthly with layered dbt transformations and enterprise-grade data quality enforcement.</p>
+        <ul class="proj-highlights">
+          <li>3-layer data quality: Airflow anomaly detection vs 6-month rolling avg, dbt schema tests, Great Expectations statistical validations with HTML data docs</li>
+          <li>Layered dbt model (staging → intermediate → marts) with incremental processing — reduces compute cost by processing only new months</li>
+          <li>Fully containerized with Docker Compose; CI via GitHub Actions runs dbt tests on every PR automatically</li>
+        </ul>
+        <div class="proj-stack">
+          <span class="proj-chip">Airflow</span><span class="proj-chip">dbt Core</span><span class="proj-chip">Snowflake</span><span class="proj-chip">Great Expectations</span><span class="proj-chip">Docker</span><span class="proj-chip">GitHub Actions</span><span class="proj-chip">Python</span>
+        </div>
+      </div>
+      <div class="proj-link-col">
+        <a href="https://github.com/AJAY00923" target="_blank" class="proj-link">GitHub ↗</a>
+      </div>
+    </div>
+
+    <div class="project-row">
+      <div class="proj-num">02</div>
+      <div class="proj-content">
+        <div class="proj-title">Banking Data Pipeline</div>
+        <p class="proj-desc">Modular, production-style ETL pipeline for banking transaction data with enterprise data engineering patterns including idempotency, incremental loading, and full audit traceability.</p>
+        <ul class="proj-highlights">
+          <li>Incremental loading via watermark-based detection — only new records processed on each run</li>
+          <li>Idempotent inserts using PostgreSQL ON CONFLICT DO NOTHING with duplicate removal on TransactionID</li>
+          <li>Audit columns (load_timestamp, batch_id), future-date filtering, YAML config, and structured logging</li>
+        </ul>
+        <div class="proj-stack">
+          <span class="proj-chip">Python</span><span class="proj-chip">pandas</span><span class="proj-chip">PostgreSQL</span><span class="proj-chip">psycopg2</span><span class="proj-chip">YAML</span><span class="proj-chip">Git</span>
+        </div>
+      </div>
+      <div class="proj-link-col">
+        <a href="https://github.com/AJAY00923/banking-data-pipeline" target="_blank" class="proj-link">GitHub ↗</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- AI ROADMAP -->
+<section id="roadmap" style="background:var(--bg2); border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+<div class="section-wrap">
+  <div class="section-label">ai development roadmap</div>
+  <h2 class="section-title">What's coming next</h2>
+  <div class="roadmap-grid">
+
+    <div class="roadmap-card done">
+      <span class="card-badge badge-done">✓ Complete</span>
+      <div class="card-title">NYC Taxi ELT Pipeline</div>
+      <p class="card-desc">Production ELT with dbt, Airflow, Snowflake and 3-layer data quality enforcement.</p>
+      <div class="card-stack">Airflow · dbt · Snowflake · GE · Docker</div>
+    </div>
+
+    <div class="roadmap-card done">
+      <span class="card-badge badge-done">✓ Complete</span>
+      <div class="card-title">Banking ETL Pipeline</div>
+      <p class="card-desc">Modular Python ETL with incremental loading, idempotent inserts, and audit trail.</p>
+      <div class="card-stack">Python · pandas · PostgreSQL · YAML</div>
+    </div>
+
+    <div class="roadmap-card in-progress">
+      <span class="card-badge badge-progress">⟳ Building</span>
+      <div class="card-title">RAG Pipeline</div>
+      <p class="card-desc">Document ingestion → chunking → embedding → vector DB → LLM query interface with FastAPI.</p>
+      <div class="card-stack">LangChain · OpenAI · Pinecone · FastAPI · Docker</div>
+    </div>
+
+    <div class="roadmap-card planned">
+      <span class="card-badge badge-planned">◻ Planned</span>
+      <div class="card-title">ML Feature Store + Training Pipeline</div>
+      <p class="card-desc">Feature engineering pipeline feeding a trained ML model with experiment tracking via MLflow.</p>
+      <div class="card-stack">Python · scikit-learn · MLflow · Airflow · PostgreSQL</div>
+    </div>
+
+    <div class="roadmap-card planned">
+      <span class="card-badge badge-planned">◻ Planned</span>
+      <div class="card-title">LLM-Powered SQL Generator</div>
+      <p class="card-desc">Natural language → SQL query API. Users describe data questions, LLM generates and executes SQL.</p>
+      <div class="card-stack">FastAPI · OpenAI API · PostgreSQL · Docker · Railway</div>
+    </div>
+
+    <div class="roadmap-card planned">
+      <span class="card-badge badge-planned">◻ Planned</span>
+      <div class="card-title">Real-Time ML Inference Pipeline</div>
+      <p class="card-desc">Kafka streaming → PySpark transform → model inference → results stored in real-time.</p>
+      <div class="card-stack">Kafka · PySpark Streaming · ONNX · Redis · PostgreSQL</div>
+    </div>
+
+    <div class="roadmap-card planned">
+      <span class="card-badge badge-planned">◻ Planned</span>
+      <div class="card-title">Domain Fine-Tuned LLM</div>
+      <p class="card-desc">Fine-tune Mistral/Llama on financial or healthcare domain data using LoRA/PEFT.</p>
+      <div class="card-stack">HuggingFace · LoRA · PEFT · Colab · Modal</div>
+    </div>
+
+    <div class="roadmap-card planned">
+      <span class="card-badge badge-planned">◻ Planned</span>
+      <div class="card-title">AI-Powered Data Quality</div>
+      <p class="card-desc">Use LLMs to auto-generate Great Expectations suites and dbt test cases from schema descriptions.</p>
+      <div class="card-stack">OpenAI API · Great Expectations · dbt · Python</div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+<div class="section-wrap">
+  <div class="section-label">work history</div>
+  <h2 class="section-title">Experience</h2>
+  <div class="tl">
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-head">
+        <div>
+          <div class="tl-title">Data Engineer</div>
+          <div class="tl-company">Huntington National Bank · Chicago, IL</div>
+        </div>
+        <div class="tl-date">Aug 2025 — Present</div>
+      </div>
+      <ul class="tl-bullets">
+        <li>Designed scalable ETL pipelines using PySpark & AWS Glue — millions of transactions processed daily, CDC logic cut processing time by 40%</li>
+        <li>Integrated Kafka streaming pipelines for near real-time event-driven ingestion</li>
+        <li>Built star schema models in Redshift & Snowflake for enterprise analytics and regulatory reporting</li>
+        <li>Leveraged S3 data lake with partitioning strategies for query optimization and cost efficiency</li>
+        <li>Implemented CI/CD with GitHub Actions; enforced data governance, encryption, and access controls</li>
+      </ul>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-head">
+        <div>
+          <div class="tl-title">AI Graduate Research Assistant</div>
+          <div class="tl-company">Lewis University · Chicago, IL</div>
+        </div>
+        <div class="tl-date">Feb 2024 — Feb 2025</div>
+      </div>
+      <ul class="tl-bullets">
+        <li>Built ETL pipelines in Python & PySpark feeding AI research and ML modeling workflows</li>
+        <li>Transformed unstructured datasets into performant assets across AWS S3, Redshift & GCP BigQuery</li>
+        <li>Developed Monte Carlo simulation models for uncertainty analysis — thousands of probabilistic scenarios</li>
+        <li>Optimized SQL queries improving analytical performance by 35%</li>
+        <li>Built Power BI & Tableau dashboards communicating AI model outputs to non-technical stakeholders</li>
+      </ul>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-head">
+        <div>
+          <div class="tl-title">Junior Data Engineer</div>
+          <div class="tl-company">Aster DM Healthcare · India</div>
+        </div>
+        <div class="tl-date">Jun 2021 — Jul 2023</div>
+      </div>
+      <ul class="tl-bullets">
+        <li>Designed production ETL pipelines for high-volume patient, claims & operational healthcare data</li>
+        <li>Built star & snowflake schema models supporting hospital performance dashboards</li>
+        <li>Automated workflows with Airflow — reduced ETL runtime by 50%</li>
+        <li>Ensured HIPAA-compliant data handling with encryption and access controls</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact-band">
+<div class="contact-inner">
+  <div>
+    <div class="section-label" style="color:#665e58;">get in touch</div>
+    <h2 class="contact-title">Let's build<br>something <span>great</span></h2>
+    <p class="contact-sub">Open to Data Engineer, AI Engineer, and Analytics Engineer roles. Based in Chicago, IL — open to remote opportunities worldwide.</p>
+    <a href="mailto:ajaygopavrapu143@gmail.com" class="btn-fill" style="background:var(--accent);border-color:var(--accent);">Send a Message →</a>
+  </div>
+  <div class="contact-cards">
+    <a href="mailto:ajaygopavrapu143@gmail.com" class="c-card">
+      <div class="c-icon">@</div>
+      <div><span class="c-label">Email</span><span class="c-val">ajaygopavrapu143@gmail.com</span></div>
+    </a>
+    <a href="https://linkedin.com/in/ajay-gopavarapu-bb2a261bb" target="_blank" class="c-card">
+      <div class="c-icon">in</div>
+      <div><span class="c-label">LinkedIn</span><span class="c-val">linkedin.com/in/ajay-gopavarapu</span></div>
+    </a>
+    <a href="https://github.com/AJAY00923" target="_blank" class="c-card">
+      <div class="c-icon">{}</div>
+      <div><span class="c-label">GitHub</span><span class="c-val">github.com/AJAY00923</span></div>
+    </a>
+    <div class="c-card">
+      <div class="c-icon">📍</div>
+      <div><span class="c-label">Location</span><span class="c-val">Chicago, IL · Remote OK</span></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <span class="f-text">© 2026 Ajay Gopavarapu</span>
+    <span class="f-text">Data Engineer · AI Developer · Chicago, IL</span>
+  </div>
+</footer>
+
+<script>
+  // cursor
+  const cur = document.getElementById('cur');
+  const curO = document.getElementById('curO');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove', e => {
+    mx=e.clientX; my=e.clientY;
+    cur.style.left=mx+'px'; cur.style.top=my+'px';
+  });
+  (function animO(){
+    rx+=(mx-rx)*0.1; ry+=(my-ry)*0.1;
+    curO.style.left=rx+'px'; curO.style.top=ry+'px';
+    requestAnimationFrame(animO);
+  })();
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{ curO.style.width='48px'; curO.style.height='48px'; curO.style.opacity='0.7'; });
+    el.addEventListener('mouseleave',()=>{ curO.style.width='32px'; curO.style.height='32px'; curO.style.opacity='0.4'; });
+  });
+
+  // scroll reveal
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+  },{threshold:0.12});
+  document.querySelectorAll('.tl-item,.project-row,.roadmap-card').forEach(el=>obs.observe(el));
+
+  // stagger
+  document.querySelectorAll('.roadmap-card').forEach((c,i)=>{ c.style.transitionDelay=`${i*0.07}s`; });
+  document.querySelectorAll('.project-row').forEach((c,i)=>{ c.style.transitionDelay=`${i*0.1}s`; });
+</script>
+</body>
+</html>
